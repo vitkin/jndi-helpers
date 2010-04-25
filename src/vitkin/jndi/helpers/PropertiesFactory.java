@@ -17,18 +17,17 @@ import javax.naming.spi.ObjectFactory;
  * DOCUMENT ME!
  *
  * @author Victor Itkin
- * @version $Revision: 2 $
+ * @version $Revision$
  */
 public class PropertiesFactory implements ObjectFactory
 {
   //~ Static fields/initializers -----------------------------------------------
-
+  
   /** DOCUMENT ME! */
-  private static final Logger logger =
-    Logger.getLogger(PropertiesFactory.class);
+  private static final Logger logger = Logger.getLogger(PropertiesFactory.class);
 
   //~ Methods ------------------------------------------------------------------
-
+  
   /*****************************************************************************
    * DOCUMENT ME!
    *
@@ -41,24 +40,19 @@ public class PropertiesFactory implements ObjectFactory
    *
    * @throws Exception DOCUMENT ME!
    */
-  public Object getObjectInstance(Object obj, Name name, Context nameCtx,
-                                  Hashtable environment)
-                           throws Exception
+  public Object getObjectInstance(final Object obj, final Name name,
+    final Context nameCtx, final Hashtable environment)
+    throws Exception
   {
     // Acquire an instance of the Properties class
-    Properties properties = new Properties();
+    final Properties properties = new Properties();
 
     // Customize the properties from our attributes
-    Reference ref = (Reference) obj;
-
-    for (Enumeration addrs = ref.getAll(); addrs.hasMoreElements();)
+    for (final Enumeration addrs = ((Reference) obj).getAll();
+        addrs.hasMoreElements();)
     {
-      RefAddr addr = (RefAddr) addrs.nextElement();
-
-      String propName = addr.getType();
-      String propValue = (String) addr.getContent();
-
-      properties.put(propName, propValue);
+      final RefAddr addr = (RefAddr) addrs.nextElement();
+      properties.put(addr.getType(), addr.getContent());
     }
 
     if (logger.isDebugEnabled())
