@@ -1,11 +1,11 @@
 package vitkin.jndi.helpers;
 
-import org.apache.catalina.Lifecycle;
-import org.apache.catalina.LifecycleEvent;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.LifecycleListener;
+import com.sun.appserv.server.LifecycleEvent;
+import com.sun.appserv.server.LifecycleListener;
+import com.sun.appserv.server.ServerLifecycleException;
 
 import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 
 /*******************************************************************************
@@ -16,19 +16,27 @@ import org.apache.log4j.LogManager;
  */
 public class Log4JLifecycleListener implements LifecycleListener
 {
-  //~ Methods ------------------------------------------------------------------
+  //~ Static fields/initializers -----------------------------------------------
   
+  /** DOCUMENT ME! */
+  private static final Logger logger = LogManager.getLogger(Log4JLifecycleListener.class);
+
+  //~ Methods ------------------------------------------------------------------
+
   /*****************************************************************************
    * DOCUMENT ME!
    *
    * @param le DOCUMENT ME!
    *
-   * @throws LifecycleException DOCUMENT ME!
+   * @throws ServerLifecycleException DOCUMENT ME!
    */
-  public void lifecycleEvent(LifecycleEvent le) throws LifecycleException
+  public void handleEvent(LifecycleEvent le) throws ServerLifecycleException
   {
-    if (Lifecycle.START_EVENT.equals(le.getType()))
+    if (LifecycleEvent.STARTUP_EVENT == le.getEventType())
     {
+      logger.info(
+        "Setting Log4J repository selector to Log4JJndiRepositorySelector");
+
       LogManager.setRepositorySelector(new Log4JJndiRepositorySelector(), this);
     }
   }
